@@ -1,7 +1,18 @@
-// Restaurant details shown in the header, hero info bar and footer.
+// Absolute base URL, so shared links (WhatsApp, Facebook…) get absolute image URLs.
+// NEXT_PUBLIC_SITE_URL wins (custom domain); on Vercel it falls back to the production domain.
+function siteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return "http://localhost:3000";
+}
+
+// Restaurant details shown in the header, hero info bar, footer and link previews.
 export const site = {
+  url: siteUrl(),
   name: "Sabor de Angola",
   tagline: "Cozinha & Bar",
+  /** Short line for link previews. */
+  slogan: "Boa comida. Bons momentos.",
   description:
     "Restaurante de cozinha angolana contemporânea na Marginal de Luanda. Muamba, calulu, grelhados na brasa, marisco fresco e cocktails de autor.",
   address: { line: "Av. 4 de Fevereiro, 23", city: "Marginal de Luanda" },
