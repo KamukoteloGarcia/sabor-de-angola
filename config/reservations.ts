@@ -14,7 +14,20 @@ export const testimonials = [
     name: "Yolanda Neto",
     detail: "Benguela · Google",
   },
+  {
+    quote: "Jantar a dois na esplanada, com o pôr do sol na baía e o semifrio de café do Amboim. Simplesmente perfeito.",
+    name: "Hélder e Marisa Tavares",
+    detail: "Luanda · Instagram",
+  },
+  {
+    quote: "Levámos a equipa para o almoço de fim de ano: sala privada, serviço rápido e um calulu de comer e chorar por mais.",
+    name: "Paulo Sebastião",
+    detail: "Viana · Google",
+  },
 ];
+
+// How long each testimonial stays on screen in the carousel (ms).
+export const testimonialIntervalMs = 5500;
 
 export const reservationTimes = ["12:00", "12:30", "13:00", "13:30", "14:00", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"];
 

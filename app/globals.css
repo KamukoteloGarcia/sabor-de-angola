@@ -106,6 +106,31 @@
   }
 }
 
+/* Images coming in from the sides while scrolling, until they fit together (same progressive enhancement). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .reveal-left,
+    .reveal-right {
+      animation: reveal-side linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+
+    .reveal-right {
+      --from: 1;
+    }
+  }
+}
+
+@keyframes reveal-side {
+  from {
+    opacity: 0;
+    translate: calc(var(--from, -1) * 160px) 40px;
+    rotate: calc(var(--from, -1) * 4deg);
+    scale: 0.92;
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-jost);
   --font-display: var(--font-cormorant);
@@ -131,7 +156,8 @@
   /* Animations (always use with motion-safe:) */
   --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-hero-out: hero-out 0.9s cubic-bezier(0.4, 0, 0.6, 1) both;
-  --animate-progress: progress 4s linear forwards;
+  --animate-drift: drift 24s ease-in-out infinite alternate;
+  --animate-spark: spark 1.7s ease-out infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-float-slow: float 9s ease-in-out infinite;
   --animate-spin-slow: spin-flat 40s linear infinite;
@@ -183,22 +209,38 @@
     }
   }
 
-  /* Leaving banner text turns away in 3D. --dir is 1 (next) or -1 (previous). */
+  /* Leaving banner text turns away in 3D. */
   @keyframes hero-out {
     to {
       opacity: 0;
-      transform: perspective(1400px) translate3d(calc(var(--dir, 1) * -7%), 0, -220px)
-        rotateY(calc(var(--dir, 1) * 14deg));
+      transform: perspective(1400px) translate3d(-7%, 0, -220px) rotateY(14deg);
     }
   }
 
-  /* Progress bar filling up while a banner is shown. */
-  @keyframes progress {
+  /* Banner backdrop slowly zooming and gliding (Ken Burns) behind the 3D scene. */
+  @keyframes drift {
     from {
-      scale: 0 1;
+      scale: 1.06;
+      translate: -2% 1%;
     }
     to {
-      scale: 1 1;
+      scale: 1.18;
+      translate: 2% -2%;
+    }
+  }
+
+  /* Hover "lightning": a spark rises from the bottom of the photo and fades out. */
+  @keyframes spark {
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0.6);
+    }
+    15% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-190px) scale(1);
     }
   }
 

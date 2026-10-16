@@ -2,10 +2,10 @@ import { Clock, Phone } from "lucide-react";
 import Image from "next/image";
 import { OpeningHours } from "@/components/ui/OpeningHours";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { testimonials } from "@/config/reservations";
+import { testimonialIntervalMs, testimonials } from "@/config/reservations";
 import { site } from "@/config/site";
 import { ReservationForm } from "./ReservationForm";
-import { TestimonialCard } from "./TestimonialCard";
+import { TestimonialCarousel } from "./TestimonialCarousel";
 
 // Section 4: what guests say, and the booking form.
 export function ReservationSection() {
@@ -18,13 +18,11 @@ export function ReservationSection() {
 
       <div className="container-site">
         <SectionHeading align="center" eyebrow="Testemunhos" title="O que dizem os" accent="nossos clientes" />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.name} {...testimonial} />
-          ))}
+        <div className="mt-14">
+          <TestimonialCarousel items={testimonials} intervalMs={testimonialIntervalMs} />
         </div>
 
-        <div className="reveal mt-24">
+        <div className="reveal-left mt-24">
           <div className="relative grid overflow-hidden rounded-[28px] border-spin [--card-bg:#1d1611] motion-safe:animate-border-spin lg:grid-cols-[1fr_1.2fr]">
             <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(142,42,54,0.4),transparent)]" />
             <div className="relative border-b border-line p-8 sm:p-12 lg:border-b-0 lg:border-r">

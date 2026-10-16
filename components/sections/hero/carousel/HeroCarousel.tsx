@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { HeroScene3D } from "@/components/three/HeroScene3D";
 import type { HeroSlideId, HeroTone } from "@/config/hero";
 import { cn } from "@/lib/cn";
 import { usePageReady } from "@/lib/page-ready";
-import { HeroControls } from "./HeroControls";
 
 type HeroCarouselProps = {
   slideIds: readonly HeroSlideId[];
@@ -24,31 +23,22 @@ function prefersReducedMotion() {
   return matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Banners: the text swaps on the left with a 3D turn, while a single WebGL canvas on the right
-// morphs from one scene to the next. Autoplay and rendering pause when the hero is off screen.
+// Banners play on their own (no controls): the text swaps on the left with a 3D turn, while a single
+// WebGL canvas morphs from one scene to the next. Autoplay and rendering pause when the hero is off screen.
 export function HeroCarousel({ slideIds, tones, texts, backdrops, badges, intervalMs }: HeroCarouselProps) {
   const total = slideIds.length;
   const [active, setActive] = useState(0);
   const [leaving, setLeaving] = useState<number | null>(null);
-  const [direction, setDirection] = useState<1 | -1>(1);
   const [isVisible, setIsVisible] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
   // Everything (autoplay, 3D) starts once the splash has gone.
   const isReady = usePageReady();
   const isRunning = isVisible && isReady;
 
-  function show(index: number, dir: 1 | -1) {
-    if (index === active) return;
-    setDirection(dir);
-    setLeaving(prefersReducedMotion() ? null : active);
-    setActive(index);
-  }
-
   // Autoplay (restarts whenever the banner changes).
   useEffect(() => {
     if (!isRunning || prefersReducedMotion()) return;
     const id = setTimeout(() => {
-      setDirection(1);
       setLeaving(active);
       setActive((active + 1) % total);
     }, intervalMs);
@@ -107,7 +97,6 @@ export function HeroCarousel({ slideIds, tones, texts, backdrops, badges, interv
                 aria-roledescription="slide"
                 aria-label={`${i + 1} de ${total}`}
                 className={cn("[grid-area:1/1]", isLeaving && "pointer-events-none motion-safe:animate-hero-out")}
-                style={{ "--dir": direction } as CSSProperties}
               >
                 {text}
               </div>
@@ -123,17 +112,6 @@ export function HeroCarousel({ slideIds, tones, texts, backdrops, badges, interv
             {badges[active]}
           </div>
         </div>
-      </div>
-
-      <div data-theme={tones[active]} className="container-site absolute inset-x-0 bottom-8 z-20">
-        <HeroControls
-          total={total}
-          active={active}
-          isRunning={isRunning}
-          intervalMs={intervalMs}
-          onSelect={(index) => show(index, index > active ? 1 : -1)}
-          onStep={(step) => show((active + step + total) % total, step)}
-        />
       </div>
     </div>
   );

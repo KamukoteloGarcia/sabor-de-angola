@@ -15,11 +15,11 @@ export function AboutSection() {
       />
 
       <div className="container-site relative grid items-center gap-16 lg:grid-cols-2 lg:gap-12">
-        <PauseWhenHidden>
+        <PauseWhenHidden className="reveal-left">
           <AboutVisual />
         </PauseWhenHidden>
 
-        <div>
+        <div className="reveal-right">
           <SectionHeading eyebrow={about.eyebrow} title={about.title} accent={about.accent} />
           <div className="mt-6 space-y-4 text-[16px] leading-[1.8] text-muted sm:text-[17px]">
             {about.paragraphs.map((paragraph) => (

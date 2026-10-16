@@ -20,8 +20,8 @@ export function GallerySection() {
         />
 
         <div className="mt-14 grid auto-rows-[260px] grid-flow-dense gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {gallery.map((item) => (
-            <GalleryTile key={item.src} item={item} />
+          {gallery.map((item, i) => (
+            <GalleryTile key={item.src} item={item} index={i} />
           ))}
         </div>
       </div>

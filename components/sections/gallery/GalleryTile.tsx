@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { GalleryItem } from "@/config/gallery";
+import { revealFromSide } from "@/components/ui/reveal";
 import { cn } from "@/lib/cn";
 
 const spans: Record<GalleryItem["size"], string> = {
@@ -9,9 +10,9 @@ const spans: Record<GalleryItem["size"], string> = {
   normal: "",
 };
 
-export function GalleryTile({ item }: { item: GalleryItem }) {
+export function GalleryTile({ item, index }: { item: GalleryItem; index: number }) {
   return (
-    <figure className={cn("reveal group relative min-h-[260px] overflow-hidden rounded-[22px] bg-surface ring-1 ring-line", spans[item.size])}>
+    <figure className={cn(revealFromSide(index), "group relative min-h-[260px] overflow-hidden rounded-[22px] bg-surface ring-1 ring-line", spans[item.size])}>
       <Image
         src={item.src}
         alt={item.title}

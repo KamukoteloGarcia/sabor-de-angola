@@ -1,12 +1,14 @@
 import { Users } from "lucide-react";
 import Image from "next/image";
+import { revealFromSide } from "@/components/ui/reveal";
 import { TiltCard } from "@/components/ui/TiltCard";
+import { cn } from "@/lib/cn";
 
-type EventCardProps = { title: string; text: string; capacity: string; photo: string };
+type EventCardProps = { title: string; text: string; capacity: string; photo: string; index: number };
 
-export function EventCard({ title, text, capacity, photo }: EventCardProps) {
+export function EventCard({ title, text, capacity, photo, index }: EventCardProps) {
   return (
-    <TiltCard className="reveal h-full rounded-[24px]" max={6}>
+    <TiltCard className={cn(revealFromSide(index), "h-full rounded-[24px]")} max={6}>
       <article className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-surface shadow-[0_30px_60px_-35px_rgba(60,35,15,0.45)] ring-1 ring-line transition duration-500 hover:shadow-[0_40px_70px_-30px_rgba(168,116,47,0.45)]">
         <div className="relative aspect-[5/4] overflow-hidden">
           <Image src={photo} alt={title} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-110" />

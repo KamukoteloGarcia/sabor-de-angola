@@ -3,6 +3,7 @@
 import { useRef, useState, type KeyboardEvent } from "react";
 import type { MenuCategory } from "@/config/menu";
 import { cn } from "@/lib/cn";
+import { revealFromSide } from "@/components/ui/reveal";
 import { DishCard } from "./DishCard";
 
 // Category tabs (arrow keys move between them) and the grid of dishes of the chosen one.
@@ -66,7 +67,9 @@ export function MenuTabs({ categories }: { categories: MenuCategory[] }) {
         className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3"
       >
         {active.dishes.map((dish, i) => (
-          <DishCard key={`${active.id}-${dish.id}`} dish={dish} style={{ animationDelay: `${i * 90}ms` }} />
+          <div key={`${active.id}-${dish.id}`} className={revealFromSide(i)}>
+            <DishCard dish={dish} style={{ animationDelay: `${i * 90}ms` }} />
+          </div>
         ))}
       </div>
     </div>

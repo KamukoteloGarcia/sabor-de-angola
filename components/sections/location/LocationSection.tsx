@@ -25,7 +25,7 @@ export function LocationSection() {
         <div>
           <SectionHeading eyebrow="Localização" title="Visite-nos na" accent="Marginal" description="Em frente à baía de Luanda, com vista para o pôr do sol e estacionamento gratuito." />
 
-          <ul className="reveal mt-10 space-y-3">
+          <ul className="reveal-left mt-10 space-y-3">
             <InfoRow icon={<MapPin className="size-5" strokeWidth={1.6} />} title="Morada">
               {site.address.line}, {site.address.city}
             </InfoRow>
@@ -48,7 +48,7 @@ export function LocationSection() {
           </ButtonLink>
         </div>
 
-        <div className="reveal relative">
+        <div className="reveal-right relative">
           <div aria-hidden="true" className="absolute -inset-6 rounded-[36px] bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
           <div className="relative overflow-hidden rounded-[28px] border border-gold/40 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]">
             <iframe

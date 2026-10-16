@@ -13,7 +13,8 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      {/* overflow-x-clip: side entrances wait off screen and must not widen the page. */}
+      <main className="flex-1 overflow-x-clip">
         <Hero />
         <MenuSection />
         <AboutSection />

@@ -26,8 +26,8 @@ export function EventsSection() {
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {events.map((event) => (
-            <EventCard key={event.title} {...event} />
+          {events.map((event, i) => (
+            <EventCard key={event.title} {...event} index={i} />
           ))}
         </div>
 
