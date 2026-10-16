@@ -1,26 +1,480 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Tailwind v4 resets buttons to the default cursor; clickable things should show the hand. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 
+/* One page width for the whole site (header, sections, footer). */
+@utility container-site {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Espresso (warm, almost black) + gold, ember and palm-wine accents: a candle-lit dining room. */
+:root {
+  --bg: #17110d;
+  --bg-soft: #1d1611;
+  --surface: #231a14;
+  --card: #2b2119;
+  --forest: #1a1410;
+  --fg: #fcf4e8;
+  --muted: #d6c7b2;
+  --subtle: #a08f7a;
+  --line: rgb(255 226 180 / 0.12);
+  --gold: #deb36d;
+  --gold-bright: #f6d798;
+  --gold-deep: #a8783c;
+  --ember: #ee7139;
+  --wine: #8e2a36;
+  --palm: #6f9b63;
+  --glow: rgb(222 179 109 / 0.3);
+  --gold-gradient: linear-gradient(115deg, #a8783c 0%, #f6d798 30%, #deb36d 50%, #fff1cc 68%, #b9853f 100%);
+}
+
+/* Light sections and banners: warm cream paper with deeper gold for contrast.
+   Any element with data-theme="light" re-themes everything inside it. */
+[data-theme="light"] {
+  --bg: #f6efe3;
+  --bg-soft: #efe5d4;
+  --surface: #fffaf2;
+  --card: #fbf3e6;
+  --fg: #1f1611;
+  --muted: #5e4c3d;
+  --subtle: #8a7662;
+  --line: rgb(60 35 15 / 0.12);
+  --gold: #a8742f;
+  --gold-bright: #8f5f22;
+  --gold-deep: #7a4f1a;
+  --glow: rgb(168 116 47 / 0.18);
+  --gold-gradient: linear-gradient(115deg, #7a4f1a 0%, #c18a3c 35%, #9a6626 55%, #d2a257 72%, #7a4f1a 100%);
+  color: var(--fg);
+}
+
+/* Angle of the spinning gold border (registered so it can be animated). */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Gold gradient text; add animate-shimmer for the light sweep. */
+@utility gold-text {
+  background: var(--gold-gradient);
+  background-size: 200% auto;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Thin animated gold border around a card (the element needs a solid background of its own). */
+@utility border-spin {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--card-bg, var(--surface)), var(--card-bg, var(--surface))) padding-box,
+    conic-gradient(from var(--border-angle), rgb(222 179 109 / 0.15), var(--gold-bright) 12%, rgb(222 179 109 / 0.15) 30%, rgb(222 179 109 / 0.15) 60%, var(--ember) 72%, rgb(222 179 109 / 0.15) 85%) border-box;
+}
+
+/* Reveal on scroll (decorative, progressive enhancement: without support content is simply visible). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .reveal {
+      animation: reveal linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 60px;
+    scale: 0.96;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-jost);
+  --font-display: var(--font-cormorant);
+  --font-script: var(--font-great-vibes);
+
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-forest: var(--forest);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-deep: var(--gold-deep);
+  --color-ember: var(--ember);
+  --color-wine: var(--wine);
+  --color-palm: var(--palm);
+  --color-glow: var(--glow);
+
+  /* Animations (always use with motion-safe:) */
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-hero-out: hero-out 0.9s cubic-bezier(0.4, 0, 0.6, 1) both;
+  --animate-progress: progress 4s linear forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-spin-slow: spin-flat 40s linear infinite;
+  --animate-orbit: spin-flat 10s linear infinite;
+  --animate-steam: steam 4.5s ease-out infinite;
+  --animate-twinkle: twinkle 3.4s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  /* `backwards`: once finished it lets go, so hover transitions still work. */
+  --animate-tab-in: tab-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-shimmer: shimmer 6s linear infinite;
+  --animate-border-spin: border-spin 6s linear infinite;
+  --animate-aurora: aurora 24s ease-in-out infinite;
+  --animate-aurora-slow: aurora 34s ease-in-out infinite reverse;
+
+  @keyframes shimmer {
+    to {
+      background-position: -200% center;
+    }
+  }
+
+  @keyframes border-spin {
+    to {
+      --border-angle: 360deg;
+    }
+  }
+
+  /* Big soft lights drifting behind the page. */
+  @keyframes aurora {
+    0%,
+    100% {
+      translate: 0 0;
+      scale: 1;
+    }
+    33% {
+      translate: 8vw 6vh;
+      scale: 1.15;
+    }
+    66% {
+      translate: -6vw 10vh;
+      scale: 0.9;
+    }
+  }
+
+  /* Entrance: fade in while moving up. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 28px;
+    }
+  }
+
+  /* Leaving banner text turns away in 3D. --dir is 1 (next) or -1 (previous). */
+  @keyframes hero-out {
+    to {
+      opacity: 0;
+      transform: perspective(1400px) translate3d(calc(var(--dir, 1) * -7%), 0, -220px)
+        rotateY(calc(var(--dir, 1) * 14deg));
+    }
+  }
+
+  /* Progress bar filling up while a banner is shown. */
+  @keyframes progress {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -16px;
+    }
+  }
+
+  /* Uses the individual `rotate` property, so it composes with a 3D `transform`. */
+  @keyframes spin-flat {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  /* Steam / smoke wisp rising from a hot dish. */
+  @keyframes steam {
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0.6, 0.8);
+    }
+    25% {
+      opacity: 0.55;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-150px) scale(1.4, 1.6);
+    }
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.15;
+      scale: 0.7;
+    }
+    50% {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* The track holds the words twice, so sliding half its width loops seamlessly. */
+  @keyframes marquee {
+    to {
+      translate: -50% 0;
+    }
+  }
+
+  @keyframes tab-in {
+    from {
+      opacity: 0;
+      translate: 0 32px;
+    }
+  }
+}
+
+/* Smooth in-page navigation, only when motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Freeze every animation inside an area that is off screen (saves CPU/GPU). */
+[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+html {
+  color-scheme: dark;
+  scroll-padding-top: 88px;
+  scrollbar-color: var(--gold-deep) var(--bg);
+  scrollbar-width: thin;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-jost), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+/* ---------- Splash (first load) ---------- */
+
+/* Hero entrance animations wait for the splash to leave (only when scripts run, so they never stay hidden). */
+@media (scripting: enabled) {
+  html:not([data-ready]) #inicio * {
+    animation-play-state: paused !important;
+  }
+}
+
+/* Fail-safe: even if JavaScript never runs, the splash goes away on its own. */
+.splash {
+  animation: splash-failsafe 0.6s 9s forwards;
+}
+
+/* Hidden until it starts drawing: a zero-length dash would still show its round caps as dots. */
+.splash-draw {
+  opacity: 0;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: splash-draw 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.splash-rise {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: splash-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.splash-pop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: splash-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.splash-letter {
+  opacity: 0;
+  animation: splash-letter 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.splash-fade {
+  opacity: 0;
+  animation: splash-fade 0.8s ease forwards;
+}
+
+.splash-bar {
+  scale: 0 1;
+  animation: splash-bar 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.splash-glow {
+  animation: splash-glow 2.4s ease-in-out infinite;
+}
+
+/* Leaving: the content fades, the bar completes and the curtain opens. */
+.splash-leave .splash-content {
+  animation: splash-content-out 0.45s ease forwards;
+}
+
+.splash-leave .splash-bar {
+  scale: 1 1;
+  transition: scale 0.3s ease;
+}
+
+.splash-leave .splash-curtain {
+  animation: splash-curtain 0.8s 0.25s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+.splash-leave .splash-curtain-right {
+  --curtain-to: 100%;
+}
+
+@keyframes splash-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes splash-draw {
+  0% {
+    opacity: 0;
+  }
+  4%,
+  100% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes splash-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scaleY(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes splash-pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes splash-letter {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes splash-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes splash-bar {
+  to {
+    scale: 0.9 1;
+  }
+}
+
+@keyframes splash-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    scale: 0.92;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.06;
+  }
+}
+
+@keyframes splash-content-out {
+  to {
+    opacity: 0;
+    scale: 0.94;
+  }
+}
+
+@keyframes splash-curtain {
+  to {
+    translate: var(--curtain-to, -100%) 0;
+  }
+}
+
+/* Less motion: show the finished logo at once and simply fade the splash out. */
+@media (prefers-reduced-motion: reduce) {
+  .splash-draw,
+  .splash-rise,
+  .splash-pop,
+  .splash-letter,
+  .splash-fade,
+  .splash-bar,
+  .splash-glow {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .splash-leave {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .splash-leave .splash-content,
+  .splash-leave .splash-curtain {
+    animation: none;
+  }
 }
